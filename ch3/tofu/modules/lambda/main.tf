@@ -24,7 +24,7 @@ data "archive_file" "source_code" {
 }
 
 resource "aws_iam_role" "lambda" {
-  name               = var.name
+  name               = "LabRole"
   assume_role_policy = data.aws_iam_policy_document.policy.json
 }
 
