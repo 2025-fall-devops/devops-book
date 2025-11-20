@@ -1,6 +1,6 @@
 resource "aws_lambda_function" "function" {
   function_name = var.name
-  role          = aws_iam_role.lambda.arn
+  role          = data.aws_iam_role.labrole.arn   # use existing role
 
   package_type     = "Zip"
   filename         = data.archive_file.source_code.output_path
@@ -23,24 +23,15 @@ data "archive_file" "source_code" {
   output_path = "${path.module}/${var.name}.zip"
 }
 
-resource "aws_iam_role" "lambda" {
-  name               = "LabRole"
-  assume_role_policy = data.aws_iam_policy_document.policy.json
+# Reference existing LabRole instead of creating it
+data "aws_iam_role" "labrole" {
+  name = "LabRole"
 }
 
-data "aws_iam_policy_document" "policy" {
-  statement {
-    actions = ["sts:AssumeRole"]
-    principals {
-      type        = "Service"
-      identifiers = ["lambda.amazonaws.com"]
-    }
-  }
-}
-
+# Attach logging policy to the existing LabRole
 resource "aws_iam_role_policy" "allow_logging" {
   name   = "${var.name}-allow-logging"
-  role   = aws_iam_role.lambda.name
+  role   = data.aws_iam_role.labrole.name
   policy = data.aws_iam_policy_document.allow_logging.json
 }
 
