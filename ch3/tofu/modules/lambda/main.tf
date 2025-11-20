@@ -29,11 +29,11 @@ data "aws_iam_role" "labrole" {
 }
 
 # Attach logging policy to the existing LabRole
-resource "aws_iam_role_policy" "allow_logging" {
-  name   = "${var.name}-allow-logging"
-  role   = data.aws_iam_role.labrole.name
-  policy = data.aws_iam_policy_document.allow_logging.json
-}
+#resource "aws_iam_role_policy" "allow_logging" {
+#  name   = "${var.name}-allow-logging"
+#  role   = data.aws_iam_role.labrole.name
+#  policy = data.aws_iam_policy_document.allow_logging.json
+#}
 
 data "aws_iam_policy_document" "allow_logging" {
   statement {
